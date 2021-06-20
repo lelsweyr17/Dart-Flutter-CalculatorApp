@@ -8,39 +8,27 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   num res = 0;
-  String sub = '';
   Set<String> signs = {'+', '-', '*', '/', '.', '%', '^'};
 
   final TextEditingController t = TextEditingController(text: '');
 
   void doResult() {
     setState(() {
-      if (t.text.length > 0) {
-        sub = t.text.substring(t.text.length - 1, t.text.length);
-        for (int i = 0; i < signs.length; i++) {
-          if (sub == signs.elementAt(i)) {
-            sub = t.text.substring(0, t.text.length - 1);
-            res = sub.interpret();
-            break;
-          } else if (i == signs.length - 1) {
-            res = t.text.interpret();
-          }
-        }
-      }
+      try {
+        res = t.text.interpret();
+      } catch (exception) {}
     });
   }
 
   void doJoin(String symbol) {
     setState(() {
-      /* replace the last symbol if it's a sign by new sign */
+      /** replace the last symbol if it's a sign by new sign **/
       if (t.text.length > 0) {
-        sub = t.text.substring(t.text.length - 1, t.text.length);
+        String sub = t.text.substring(t.text.length - 1, t.text.length);
         for (int i = 0; i < signs.length; i++) {
           if (sub == signs.elementAt(i)) {
             for (int i = 0; i < signs.length; i++) {
               if (symbol == signs.elementAt(i)) {
-                print('sub: $sub');
-                print('t.text: $t.text');
                 t.text = t.text.substring(0, t.text.length - 1);
                 break;
               }
@@ -72,15 +60,16 @@ class HomePageState extends State<HomePage> {
         child: Column(
           children: <Widget>[
             Text(
-              'Output : $res',
+              '$res',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0,
-                  color: Colors.indigo[200]),
+                  color: Colors.indigo),
             ),
             TextField(
+              textAlign: TextAlign.right,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(hintText: 'Enter Number 1'),
+              decoration: InputDecoration(hintText: '\u2665 Enter \u2665'),
               controller: t,
             ),
             Padding(padding: const EdgeInsets.only(top: 20.0)),
@@ -88,15 +77,15 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('^'),
                     onPressed: () => doJoin('^')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('('),
                     onPressed: () => doJoin('(')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text(')'),
                     onPressed: () => doJoin(')')),
               ],
@@ -105,15 +94,15 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('+'),
                     onPressed: () => doJoin('+')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('-'),
                     onPressed: () => doJoin('-')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('*'),
                     onPressed: () => doJoin('*')),
               ],
@@ -123,15 +112,15 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('%'),
                     onPressed: () => doJoin('%')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('/'),
                     onPressed: () => doJoin('/')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('.'),
                     onPressed: () => doJoin('.')),
               ],
@@ -141,15 +130,15 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('1'),
                     onPressed: () => doJoin('1')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('2'),
                     onPressed: () => doJoin('2')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('3'),
                     onPressed: () => doJoin('3')),
               ],
@@ -158,15 +147,15 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('4'),
                     onPressed: () => doJoin('4')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('5'),
                     onPressed: () => doJoin('5')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('6'),
                     onPressed: () => doJoin('6')),
               ],
@@ -175,15 +164,15 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('7'),
                     onPressed: () => doJoin('7')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('8'),
                     onPressed: () => doJoin('8')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('9'),
                     onPressed: () => doJoin('9')),
               ],
@@ -192,15 +181,15 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[100],
                     child: Text('Clear'),
                     onPressed: doClear),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('0'),
                     onPressed: () => doJoin('0')),
                 MaterialButton(
-                    color: Colors.indigo[200],
+                    color: Colors.indigo[50],
                     child: Text('='),
                     onPressed: doResult),
               ],
