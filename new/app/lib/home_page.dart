@@ -58,6 +58,18 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void onPressedButtom(String symbol) {
+    if (symbol == 'AC') {
+      doClear();
+    } else if (symbol == 'C') {
+      clearOneSymbol();
+    } else if (symbol == '=') {
+      doResult();
+    } else {
+      doJoin(symbol);
+    }
+  }
+
   Widget buildButtom(
       String textButtom, double heightButtom, Color? colorButtom) {
     return Container(
@@ -78,7 +90,7 @@ class HomePageState extends State<HomePage> {
                         style: BorderStyle.solid),
                   ),
                   padding: EdgeInsets.all(16.0),
-                  onPressed: doClear,
+                  onPressed: () => onPressedButtom(textButtom),
                   child: Text(textButtom,
                       style: TextStyle(
                           fontSize: 30.0,
@@ -121,52 +133,71 @@ class HomePageState extends State<HomePage> {
                   color: Colors.amber),
             ),
           ),
-
           Expanded(child: Divider()),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-							buildButtom('AC', MediaQuery.of(context).size.height * 0.1, Colors.red[200]),
-							buildButtom('C', MediaQuery.of(context).size.height * 0.1, Colors.red[200]),
-							buildButtom('.', MediaQuery.of(context).size.height * 0.1, Colors.teal[100]),
-							buildButtom('/', MediaQuery.of(context).size.height * 0.1, Colors.teal[100]),
-						],
+              buildButtom('AC', MediaQuery.of(context).size.height * 0.1,
+                  Colors.red[200]),
+              buildButtom('C', MediaQuery.of(context).size.height * 0.1,
+                  Colors.red[200]),
+              buildButtom('.', MediaQuery.of(context).size.height * 0.1,
+                  Colors.teal[100]),
+              buildButtom('/', MediaQuery.of(context).size.height * 0.1,
+                  Colors.teal[100]),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-							buildButtom('7', MediaQuery.of(context).size.height * 0.1, Colors.amber[200]),
-							buildButtom('8', MediaQuery.of(context).size.height * 0.1, Colors.amber[200]),
-							buildButtom('9', MediaQuery.of(context).size.height * 0.1,Colors.amber[200]),
-							buildButtom('*', MediaQuery.of(context).size.height * 0.1, Colors.teal[100]),
-						],
+              buildButtom('7', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('8', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('9', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('*', MediaQuery.of(context).size.height * 0.1,
+                  Colors.teal[100]),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-							buildButtom('4', MediaQuery.of(context).size.height * 0.1, Colors.amber[200]),
-							buildButtom('5', MediaQuery.of(context).size.height * 0.1, Colors.amber[200]),
-							buildButtom('6', MediaQuery.of(context).size.height * 0.1,Colors.amber[200]),
-							buildButtom('-', MediaQuery.of(context).size.height * 0.1, Colors.teal[100]),
-						],
+              buildButtom('4', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('5', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('6', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('-', MediaQuery.of(context).size.height * 0.1,
+                  Colors.teal[100]),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-							buildButtom('1', MediaQuery.of(context).size.height * 0.1, Colors.amber[200]),
-							buildButtom('2', MediaQuery.of(context).size.height * 0.1, Colors.amber[200]),
-							buildButtom('3', MediaQuery.of(context).size.height * 0.1,Colors.amber[200]),
-							buildButtom('+', MediaQuery.of(context).size.height * 0.1, Colors.teal[100]),
-						],
+              buildButtom('1', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('2', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('3', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('+', MediaQuery.of(context).size.height * 0.1,
+                  Colors.teal[100]),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-							buildButtom('(', MediaQuery.of(context).size.height * 0.1, Colors.amber[200]),
-							buildButtom('0', MediaQuery.of(context).size.height * 0.1, Colors.amber[200]),
-							buildButtom(')', MediaQuery.of(context).size.height * 0.1,Colors.amber[200]),
-							buildButtom('=', MediaQuery.of(context).size.height * 0.1, Colors.red[200]),
-						],
+              buildButtom('(', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('0', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom(')', MediaQuery.of(context).size.height * 0.1,
+                  Colors.amber[200]),
+              buildButtom('=', MediaQuery.of(context).size.height * 0.1,
+                  Colors.red[200]),
+            ],
           ),
         ],
       ),
