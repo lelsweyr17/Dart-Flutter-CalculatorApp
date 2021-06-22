@@ -7,8 +7,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  num res = 0;
-  Set<String> signs = {'+', '-', '*', '/', '.', '%', '^'};
+  dynamic res = 0;
+  Set<String> signs = {'+', '-', '*', '/', '.', '^'};
 
   final TextEditingController t = TextEditingController(text: '');
 
@@ -16,7 +16,9 @@ class HomePageState extends State<HomePage> {
     setState(() {
       try {
         res = t.text.interpret();
-      } catch (exception) {}
+      } catch (exception) {
+        if (t.text.length == 0) res = 0;
+      }
     });
   }
 
@@ -42,6 +44,13 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void clearOneSymbol() {
+    setState(() {
+      t.text = t.text.substring(0, t.text.length - 1);
+      doResult();
+    });
+  }
+
   void doClear() {
     setState(() {
       res = 0;
@@ -55,147 +64,510 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Calculator'),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            Text(
-              '$res',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                  color: Colors.indigo),
-            ),
-            TextField(
+      body: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
+            child: TextField(
               textAlign: TextAlign.right,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(hintText: '\u2665 Enter \u2665'),
               controller: t,
             ),
-            Padding(padding: const EdgeInsets.only(top: 20.0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('^'),
-                    onPressed: () => doJoin('^')),
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('('),
-                    onPressed: () => doJoin('(')),
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text(')'),
-                    onPressed: () => doJoin(')')),
-              ],
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+            alignment: Alignment.centerRight,
+            child: Text(
+              '$res',
+              style: TextStyle(
+                  fontSize: 38,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.amber),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('+'),
-                    onPressed: () => doJoin('+')),
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('-'),
-                    onPressed: () => doJoin('-')),
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('*'),
-                    onPressed: () => doJoin('*')),
-              ],
-            ),
-            // Padding(padding: const EdgeInsets.only(top: 20.0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('%'),
-                    onPressed: () => doJoin('%')),
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('/'),
-                    onPressed: () => doJoin('/')),
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('.'),
-                    onPressed: () => doJoin('.')),
-              ],
-            ),
-            // Padding(padding: const EdgeInsets.only(top: 20.0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('1'),
-                    onPressed: () => doJoin('1')),
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('2'),
-                    onPressed: () => doJoin('2')),
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('3'),
-                    onPressed: () => doJoin('3')),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('4'),
-                    onPressed: () => doJoin('4')),
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('5'),
-                    onPressed: () => doJoin('5')),
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('6'),
-                    onPressed: () => doJoin('6')),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('7'),
-                    onPressed: () => doJoin('7')),
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('8'),
-                    onPressed: () => doJoin('8')),
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('9'),
-                    onPressed: () => doJoin('9')),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                MaterialButton(
-                    color: Colors.indigo[100],
-                    child: Text('Clear'),
-                    onPressed: doClear),
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('0'),
-                    onPressed: () => doJoin('0')),
-                MaterialButton(
-                    color: Colors.indigo[50],
-                    child: Text('='),
-                    onPressed: doResult),
-              ],
-            ),
-          ],
-        ),
+          ),
+          Expanded(child: Divider()),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 1,
+                child: Table(
+                  children: [
+                    TableRow(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.red[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: doClear,
+                            child: Text('AC',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.red[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: clearOneSymbol,
+                            child: Text('C',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.teal[100],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('.'),
+                            child: Text('.',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.teal[100],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('/'),
+                            child: Text('/',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 1,
+                child: Table(
+                  children: [
+                    TableRow(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('7'),
+                            child: Text('7',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('8'),
+                            child: Text('8',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('9'),
+                            child: Text('9',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.teal[100],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('*'),
+                            child: Text('*',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 1,
+                child: Table(
+                  children: [
+                    TableRow(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('4'),
+                            child: Text('4',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('5'),
+                            child: Text('5',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('6'),
+                            child: Text('6',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.teal[100],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('-'),
+                            child: Text('-',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 1,
+                child: Table(
+                  children: [
+                    TableRow(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('1'),
+                            child: Text('1',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('2'),
+                            child: Text('2',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('3'),
+                            child: Text('3',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.teal[100],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('+'),
+                            child: Text('+',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 1,
+                child: Table(
+                  children: [
+                    TableRow(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('('),
+                            child: Text('(',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin('0'),
+                            child: Text('0',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.amber[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doJoin(')'),
+                            child: Text(')',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.red[200],
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                            ),
+                            padding: EdgeInsets.all(16.0),
+                            onPressed: () => doResult,
+                            child: Text('=',
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
