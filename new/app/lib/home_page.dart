@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  State createState() => HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   dynamic res = 0;
   Set<String> signs = {'+', '-', '*', '/', '.', '^'};
 
@@ -27,17 +27,8 @@ class HomePageState extends State<HomePage> {
       /** replace the last symbol if it's a sign by new sign **/
       if (t.text.length > 0) {
         String sub = t.text.substring(t.text.length - 1, t.text.length);
-        for (int i = 0; i < signs.length; i++) {
-          if (sub == signs.elementAt(i)) {
-            for (int i = 0; i < signs.length; i++) {
-              if (symbol == signs.elementAt(i)) {
-                t.text = t.text.substring(0, t.text.length - 1);
-                break;
-              }
-            }
-            break;
-          }
-        }
+        if (signs.contains(sub) && signs.contains(symbol))
+          t.text = t.text.substring(0, t.text.length - 1);
       }
       t.text += symbol;
       doResult();
@@ -46,7 +37,11 @@ class HomePageState extends State<HomePage> {
 
   void clearOneSymbol() {
     setState(() {
-      t.text = t.text.substring(0, t.text.length - 1);
+      try {
+				t.text = t.text.substring(0, t.text.length - 1);
+			} catch (exception) {
+				t.text = '';
+			}
       doResult();
     });
   }
@@ -133,7 +128,7 @@ class HomePageState extends State<HomePage> {
                   color: Colors.amber),
             ),
           ),
-          Expanded(child: Divider()),
+          Expanded(child: Divider(color: Colors.red[200])),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
