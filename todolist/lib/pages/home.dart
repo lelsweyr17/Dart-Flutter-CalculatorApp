@@ -13,6 +13,7 @@ class _HomePageState extends State<HomePage> {
   List toDoList = [];
   String _userToDo = '';
   List<bool> _isVisible = [];
+  List<bool> _isDone = [];
 
   void confirmDelete(int index) {
     setState(() {
@@ -52,11 +53,53 @@ class _HomePageState extends State<HomePage> {
         ),
         preferredSize: new Size(MediaQuery.of(context).size.width, 60.0),
       ),
+      drawer: Drawer(
+        child: new ListView(
+          children: <Widget> [
+            new DrawerHeader(child: new Text('TO DO', style: TextStyle(fontWeight: FontWeight.bold)), padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0)),
+            new ListTile(
+              title: new Text('First Menu Item'),
+              onTap: () {},
+            ),
+            new ListTile(
+              title: new Text('Second Menu Item'),
+              onTap: () {},
+            ),
+            new Divider(),
+            new ListTile(
+              title: new Text('About'),
+              onTap: () {},
+            ),
+          ],
+        )
+      ),
       body: ListView.builder(
         itemCount: toDoList.length,
         itemBuilder: (BuildContext context, int index) {
           return Dismissible(
-            background: Container(color: Colors.red[700], width: 20.0),
+            behavior: HitTestBehavior.translucent,
+            background: Container(
+              color: Colors.green[600],
+              width: 20.0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.archive, color: Colors.black54, size: 30)
+                    ]),
+              ),
+            ),
+            secondaryBackground: Container(
+              color: Colors.red[600],
+              width: 20.0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  Icon(Icons.delete_forever, color: Colors.black54, size: 30)
+                ]),
+              ),
+            ),
             movementDuration: const Duration(milliseconds: 500),
             key: Key(toDoList[index]),
             child: Column(
@@ -66,9 +109,18 @@ class _HomePageState extends State<HomePage> {
                   child: Card(
                     child: ListTile(
                       title: Text(toDoList[index]),
+                      leading: IconButton(
+                          icon: (_isDone[index] == false
+                              ? Icon(Icons.check_box_outline_blank_outlined)
+                              : Icon(Icons.check_box, color: Colors.green)),
+                          onPressed: () {
+                            setState(() {
+                              _isDone[index] = !_isDone[index];
+                            });
+                          }),
                       trailing: IconButton(
                           icon: Icon(Icons.delete_outlined,
-                              color: Colors.red[500]),
+                              color: Colors.red[600]),
                           onPressed: () {
                             confirmDelete(index);
                           }),
@@ -78,7 +130,10 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             confirmDismiss: (DismissDirection direction) async {
-              confirmDelete(index);
+              if (direction == DismissDirection.startToEnd) {
+              } else {
+                confirmDelete(index);
+              }
             },
           );
         },
@@ -120,6 +175,7 @@ class _HomePageState extends State<HomePage> {
                             toDoList.add(_userToDo);
                           });
                           _isVisible.add(true);
+                          _isDone.add(false);
                           Navigator.of(context).pop();
                         },
                         child: Text('ADD'))
