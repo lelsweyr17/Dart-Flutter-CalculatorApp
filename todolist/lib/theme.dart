@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:list_view/pages/home.dart';
-import 'package:list_view/theme.dart';
 
 ThemeData _darkTheme = ThemeData(
   accentColor: Colors.amber[800],
@@ -27,22 +24,20 @@ ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
 );
 
-class MaterialAppWithTheme extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Provider.of<ThemeChanger>(context);
-    return MaterialApp(home: HomePage(), theme: theme.getTheme());
+class ThemeChanger with ChangeNotifier {
+  ThemeData _themeData;
+
+  ThemeChanger(this._themeData);
+
+  getTheme() => _themeData;
+
+  setLightTheme() {
+    _themeData = _lightTheme;
+    notifyListeners();
+  }
+
+  setDarkTheme() {
+    _themeData = _darkTheme;
+    notifyListeners();
   }
 }
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ThemeChanger>(
-      create: (context) => ThemeChanger(_lightTheme),
-      child: MaterialAppWithTheme(),
-    );
-  }
-}
-
-void main() => runApp(MyApp());
