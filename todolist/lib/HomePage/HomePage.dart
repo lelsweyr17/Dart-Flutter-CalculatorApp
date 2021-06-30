@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:list_view/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:list_view/HomePage/ThemeData.dart';
+import 'package:list_view/HomePage/CustomAppBar.dart';
 
 bool darkMode = false;
 
@@ -267,27 +268,5 @@ class _HomePageState extends State<HomePage> {
                 });
           }),
     );
-  }
-}
-
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  CustomAppBar();
-
-  @override
-  Size get preferredSize => Size.fromHeight(60.0);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-        title: Text('TO DO',
-            style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 20)),
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10))));
   }
 }
