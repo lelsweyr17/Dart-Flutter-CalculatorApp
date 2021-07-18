@@ -8,9 +8,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   dynamic res = 0;
-  Set<String> signs = {'+', '-', '×', '/', '.', '^'};
+  Set<String> signs = {'+', '-', '*', '/', '.', '^'}; // '×'
 
   final TextEditingController t = TextEditingController(text: '');
+  String expr = '';
 
   void doResult() {
     setState(() {
@@ -60,6 +61,8 @@ class _HomePageState extends State<HomePage> {
       clearOneSymbol();
     } else if (symbol == '=') {
       doResult();
+    } else if (symbol == '×') {
+      doJoin('*');
     } else {
       doJoin(symbol);
     }
@@ -117,21 +120,44 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: <Widget>[
+          Expanded(child: SizedBox()),
           Padding(
-            padding: const EdgeInsets.only(top: 22.0, left: 22.0, right: 22.0),
+            padding: const EdgeInsets.only(left: 22.0, right: 22.0),
             child: ClipPath(
               child: Container(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 20.0, left: 40.0, right: 10.0),
-                  child: TextField(
-                    style: TextStyle(fontSize: 30.0),
-                    textAlign: TextAlign.right,
-                    keyboardType: TextInputType.number,
-                    controller: t,
+                  padding:
+                      const EdgeInsets.only(top: 20.0, left: 40.0, right: 10.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: TextField(
+                          style: TextStyle(
+                              fontSize: 30.0, color: Colors.teal[300]),
+                          textAlign: TextAlign.right,
+                          keyboardType: TextInputType.number,
+                          controller: t,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '$res',
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.teal[400]),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 width: MediaQuery.of(context).size.width,
-                height: 180,
+                height: MediaQuery.of(context).size.height / 4,
                 decoration: BoxDecoration(
                   color: Colors.teal[100],
                   shape: BoxShape.rectangle,
@@ -142,11 +168,15 @@ class _HomePageState extends State<HomePage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 22.0),
-            child: Container(height: 15, color: Colors.red[200]),
+            child: Container(
+                height: MediaQuery.of(context).size.height / 45,
+                color: Colors.red[200]),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 22.0),
-            child: Container(height: 20, color: Colors.amber[200]),
+            child: Container(
+                height: MediaQuery.of(context).size.height / 40,
+                color: Colors.amber[200]),
           ),
           // Container(
           //   alignment: Alignment.centerRight,
@@ -234,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                   Colors.red[200]),
             ],
           ),
-          SizedBox(height: 12.0),
+          Expanded(child: SizedBox()),
         ],
       ),
     );
