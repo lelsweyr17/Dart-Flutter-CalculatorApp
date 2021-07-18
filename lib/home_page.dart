@@ -8,7 +8,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   dynamic res = 0;
-  Set<String> signs = {'+', '-', '*', '/', '.', '^'};
+  Set<String> signs = {'+', '-', '×', '/', '.', '^'};
 
   final TextEditingController t = TextEditingController(text: '');
 
@@ -38,10 +38,10 @@ class _HomePageState extends State<HomePage> {
   void clearOneSymbol() {
     setState(() {
       try {
-				t.text = t.text.substring(0, t.text.length - 1);
-			} catch (exception) {
-				t.text = '';
-			}
+        t.text = t.text.substring(0, t.text.length - 1);
+      } catch (exception) {
+        t.text = '';
+      }
       doResult();
     });
   }
@@ -68,29 +68,32 @@ class _HomePageState extends State<HomePage> {
   Widget buildButtom(
       String textButtom, double heightButtom, Color? colorButtom) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: MediaQuery.of(context).size.width * 0.23,
       child: Table(
         children: [
           TableRow(
             children: [
-              Container(
-                height: heightButtom,
-                color: colorButtom,
-                child: MaterialButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0),
-                    side: BorderSide(
-                        color: Colors.white,
-                        width: 1,
-                        style: BorderStyle.solid),
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Container(
+                  height: heightButtom,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    color: colorButtom,
                   ),
-                  padding: EdgeInsets.all(16.0),
-                  onPressed: () => onPressedButtom(textButtom),
-                  child: Text(textButtom,
-                      style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.white)),
+                  child: MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    ),
+                    padding: EdgeInsets.all(16.0),
+                    onPressed: () => onPressedButtom(textButtom),
+                    child: Text(textButtom,
+                        style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white)),
+                  ),
                 ),
               ),
             ],
@@ -104,31 +107,68 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calculator'),
+        title: Text('CALCULATOR',
+            style: TextStyle(
+                color: Colors.red[300],
+                fontWeight: FontWeight.bold,
+                letterSpacing: 5.0)),
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
-            child: TextField(
-              textAlign: TextAlign.right,
-              keyboardType: TextInputType.number,
-              controller: t,
+          Padding(
+            padding: const EdgeInsets.only(top: 22.0, left: 22.0, right: 22.0),
+            child: ClipPath(
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0, left: 40.0, right: 10.0),
+                  child: TextField(
+                    style: TextStyle(fontSize: 30.0),
+                    textAlign: TextAlign.right,
+                    keyboardType: TextInputType.number,
+                    controller: t,
+                  ),
+                ),
+                width: MediaQuery.of(context).size.width,
+                height: 180,
+                decoration: BoxDecoration(
+                  color: Colors.teal[100],
+                  shape: BoxShape.rectangle,
+                ),
+              ),
+              clipper: CustomClipPath(),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-            alignment: Alignment.centerRight,
-            child: Text(
-              '$res',
-              style: TextStyle(
-                  fontSize: 38,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.amber),
-            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+            child: Container(height: 15, color: Colors.red[200]),
           ),
-          Expanded(child: Divider(color: Colors.red[200])),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+            child: Container(height: 20, color: Colors.amber[200]),
+          ),
+          // Container(
+          //   alignment: Alignment.centerRight,
+          //   padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
+          //   child: TextField(
+          //     textAlign: TextAlign.right,
+          //     keyboardType: TextInputType.number,
+          //     controller: t,
+          //   ),
+          // ),
+          // Container(
+          //   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+          //   alignment: Alignment.centerRight,
+          //   child: Text(
+          //     '$res',
+          //     style: TextStyle(
+          //         fontSize: 38,
+          //         fontWeight: FontWeight.bold,
+          //         color: Colors.amber),
+          //   ),
+          // ),
+          Expanded(child: SizedBox()),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -151,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                   Colors.amber[200]),
               buildButtom('9', MediaQuery.of(context).size.height * 0.1,
                   Colors.amber[200]),
-              buildButtom('*', MediaQuery.of(context).size.height * 0.1,
+              buildButtom('×', MediaQuery.of(context).size.height * 0.1,
                   Colors.teal[100]),
             ],
           ),
@@ -194,8 +234,26 @@ class _HomePageState extends State<HomePage> {
                   Colors.red[200]),
             ],
           ),
+          SizedBox(height: 12.0),
         ],
       ),
     );
   }
+}
+
+class CustomClipPath extends CustomClipper<Path> {
+  var radius = 10.0;
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.moveTo(0, 65);
+    path.lineTo(65, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
